@@ -13,21 +13,25 @@
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="RosyBrown"/>
+            <Setter Property="BorderThickness" Value="5"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="LightGreen"/>
         </Style>
         <ControlTemplate TargetType="Button" x:Key="RoundedButtonTemplate">
             <Grid>
-                <Rectangle Width="60" Height="60" Name="Outercircle">
-                    <Rectangle.Fill>
+                <Ellipse Width="60" Height="60" Name="Outercircle">
+                    <Ellipse.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                             <GradientStop Offset="0" Color="Brown"/>
                             <GradientStop Offset="1" Color="White"/>
                         </LinearGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-                <Ellipse Width="50" Height="50" Name="Innercircle">
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Ellipse Width="40" Height="40" Name="Innercircle">
                     <Ellipse.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Offset="0" Color="White"/>
+                            <GradientStop Offset="0" Color="FloralWhite"/>
                             <GradientStop Offset="1" Color="Brown"/>
                         </LinearGradientBrush>
                     </Ellipse.Fill>
@@ -36,8 +40,14 @@
             </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="Button.IsMouseOver" Value="True">
-                    <Setter TargetName="Outercircle" Property="Stroke" Value="red"/>
-                    <Setter TargetName="Outercircle" Property="StrokeThickness" Value="1"/>
+                    <Setter TargetName="Outercircle" Property="Fill">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Offset="0" Color="Black"/>
+                                <GradientStop Offset="1" Color="FloralWhite"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
                 </Trigger>
                 <Trigger Property="Button.IsPressed" Value="True">
                     <Setter TargetName="Innercircle" Property="Fill">
@@ -51,13 +61,14 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+        <local:CalculatorFunctions x:Key="calculatorObj"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <TextBox Name="txtDisplay"/>
+        <TextBox Name="txtDisplay" Text="{Binding InputString,Source={StaticResource calculatorObj}}"/>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
@@ -73,26 +84,26 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="0" Content="&lt;-" Click="Del_Click"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="1" Content="R" Click="R_Click"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="2" Content="OFF" Click="Off_Click_1"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="0" Content="C" Command="{Binding ClearCommand, Source={StaticResource calculatorObj}}"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="1" Content="R" Command="{Binding BackSpaceCommand,Source={StaticResource calculatorObj}}"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="2" Content="OFF" Command="{Binding SwitchOffCommand,Source={StaticResource calculatorObj}}"/>
 
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="0" Content="7" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="1" Content="8" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="2" Content="9" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="0" Content="4" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="1" Content="5" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="2" Content="6" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="0" Content="3" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="1" Content="2" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="2" Content="1" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="4" Grid.Column="1" Content="0" Click="Button_Click_1"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="0" Content="7" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="7"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="1" Content="8" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="8"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="2" Content="9" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="9"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="0" Content="4" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="4"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="1" Content="5" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="5"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="2" Content="6" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="6"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="0" Content="1" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="1"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="1" Content="2" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="2"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="2" Content="3" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="3"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="4" Grid.Column="1" Content="0" Command="{Binding NumericCommand,Source={StaticResource calculatorObj}}" CommandParameter="0"/>
 
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="3" Content="/" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="3" Content="*" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="3" Content="-" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="3" Content="+" Click="Button_Click_1"/>
-            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="4" Grid.Column="3" Content="=" Click="Result_click"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="0" Grid.Column="3" Content="/" Command="{Binding DivisionCommand, Source={StaticResource calculatorObj}}"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="1" Grid.Column="3" Content="*" Command="{Binding MultiplyCommand,Source={StaticResource calculatorObj}}"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="2" Grid.Column="3" Content="-" Command="{Binding SubstractionCommand,Source={StaticResource calculatorObj}}"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="3" Grid.Column="3" Content="+" Command="{Binding AdditionCommand,Source={StaticResource calculatorObj}}"/>
+            <Button Template="{StaticResource RoundedButtonTemplate}" Grid.Row="4" Grid.Column="3" Content="=" Command="{Binding ResultCommand,Source={StaticResource calculatorObj}}"/>
         </Grid>
     </Grid>
 </Window>
